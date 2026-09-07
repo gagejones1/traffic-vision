@@ -1,0 +1,18 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Secrets / configuration
+backend/src/main/resources/application.properties
+.env
+
+# Generated traffic data
+traffic_data.csv
+
+# Videos and model weights
+videos/
+*.pt
+
+# Java / Maven
+backend/target/
