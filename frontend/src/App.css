@@ -1,0 +1,123 @@
+#root {
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #0f172a;
+  color: #f8fafc;
+  font-family: Arial, sans-serif;
+}
+
+#root > div {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px;
+}
+
+h1 {
+  margin-bottom: 8px;
+  font-size: 42px;
+}
+
+#root > div > p {
+  margin-top: 0;
+  color: #94a3b8;
+  font-size: 18px;
+}
+
+.dashboard {
+  margin-top: 40px;
+}
+
+.dashboard h2 {
+  margin-bottom: 20px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.stat-card {
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.stat-card h3 {
+  margin: 0 0 15px 0;
+  color: #94a3b8;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.stat-card p {
+  margin: 0;
+  color: #f8fafc;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 550px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #root > div {
+    padding: 20px;
+  }
+}
+
+.vehicle-section {
+  margin-top: 40px;
+}
+
+.vehicle-section h2 {
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th,
+td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #334155;
+}
+
+th {
+  background-color: #172033;
+  color: #94a3b8;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+td {
+  color: #f8fafc;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background-color: #263449;
+}
