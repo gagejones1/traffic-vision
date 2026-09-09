@@ -121,3 +121,36 @@ tbody tr:last-child td {
 tbody tr:hover {
   background-color: #263449;
 }
+
+.chart-section {
+  margin-top: 40px;
+}
+
+.chart-section h2 {
+  margin-bottom: 20px;
+}
+
+.chart-card {
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.error-message {
+  color: #f87171;
+  margin-top: 16px;
+  font-weight: bold;
+}
