@@ -19,6 +19,7 @@ public class TrafficStatsController {
         this.vehicleRepository = vehicleRepository;
     }
 
+    // Calculate aggregate traffic statistics from all stored vehicle records.
     @GetMapping 
     public Map<String, Object> getStats() {
 
@@ -26,12 +27,14 @@ public class TrafficStatsController {
 
         int totalVehicles = vehicles.size();
 
+        // Calculate the average estimated speed across all recorded vehicles.
         double averageSpeed = vehicles.stream()
             .mapToDouble(Vehicle::getSpeedMph)
             .average()
             .orElse(0.0);
 
         
+        // Count vehicles by travel direction and detected vehicle type.
         long upCount = vehicles.stream()
                 .filter(vehicle -> "Up".equalsIgnoreCase(vehicle.getDirection()))
                 .count();

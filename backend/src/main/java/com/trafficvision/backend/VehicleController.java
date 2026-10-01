@@ -16,6 +16,7 @@ public class VehicleController {
         this.vehicleRepository = vehicleRepository;
     }
 
+    // Return all vehicle records stored by the traffic detection pipeline.
     @GetMapping 
     public List<Vehicle> getAllVehicles() {
         return vehicleRepository.findAll();

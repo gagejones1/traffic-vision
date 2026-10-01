@@ -4,12 +4,14 @@ import csv
 from database import SessionLocal
 from models import Vehicle 
 
+# Load the YOLO model used for vehicle detection and tracking.
 model = YOLO("yolo11n.pt")
 
 video_path = "videos/traffic.webm"
 
 csv_path = "traffic_data.csv"
 
+# Create the CSV output file and write the column headers.
 with open(csv_path, "w", newline="") as file:
     writer = csv.writer(file)
 
@@ -26,6 +28,7 @@ cap = cv2.VideoCapture(video_path)
 
 db = SessionLocal()
 
+# Store tracking information for each vehicle using its ByteTrack ID.
 vehicles = {} 
 
 crossed_vehicles = set()
@@ -33,6 +36,7 @@ crossed_vehicles = set()
 first_line_crossing = {}
 completed_trips = set()
 
+# Two reference lines are used to measure vehicle travel time and estimated speed.
 line_1_y = 350
 line_2_y = 500
 
@@ -48,6 +52,7 @@ traffic_stats = {
     "motorcycle": 0
 }
 
+# Process the traffic video frame by frame.
 while cap.isOpened():
     success, frame = cap.read()
 
@@ -59,6 +64,7 @@ while cap.isOpened():
     #resize
     frame = cv2.resize(frame, (1280,720))
 
+    # Detect supported vehicle classes and maintain persistent IDs across frames.
     results = model.track(
         frame, 
         imgsz=640,
@@ -82,6 +88,7 @@ while cap.isOpened():
             center_x = int((x1 + x2) / 2)
             center_y = int((y1 + y2) / 2)
 
+            # Initialize tracking data when a vehicle is first detected.
             if track_id not in vehicles:
                 vehicles[track_id] = {
                     "type": class_name,
@@ -144,6 +151,7 @@ while cap.isOpened():
                     else:
                         direction = None
 
+                    # Calculate travel time and estimate speed once both lines are crossed.
                     if direction is not None:
                         travel_time = video_time - first_time
 
@@ -156,6 +164,7 @@ while cap.isOpened():
 
                         completed_trips.add(track_id)
 
+                        # Save the completed vehicle trip to PostgreSQL.
                         db_vehicle = Vehicle(
                             vehicle_id=track_id,
                             type=vehicles[track_id]["type"],
@@ -168,6 +177,7 @@ while cap.isOpened():
                         db.add(db_vehicle)
                         db.commit()
 
+                        # Also export completed trip data to CSV for offline analysis.
                         with open(csv_path, "a", newline="") as file:
                             writer = csv.writer(file)
 
@@ -193,6 +203,7 @@ while cap.isOpened():
 
 
 
+                # Use the most frequently detected class to stabilize the vehicle type across frames.
                 if class_name in class_counts:
                     class_counts[class_name] += 1
                 else:
@@ -201,6 +212,7 @@ while cap.isOpened():
                 vehicle_type = max(class_counts, key=class_counts.get)
                 vehicles[track_id]["type"] = vehicle_type
 
+                # Count each vehicle once when it crosses the center counting line.
                 if track_id not in crossed_vehicles:
                     direction = None
 
@@ -232,6 +244,7 @@ while cap.isOpened():
     
     annotated_frame = results[0].plot()
 
+    # Display the estimated speed next to vehicles that completed the measured distance.
     if boxes.id is not None:
         track_ids = boxes.id.int().cpu().tolist()
         coordinates = boxes.xyxy.cpu().tolist()
@@ -252,6 +265,7 @@ while cap.isOpened():
                     2
                 )
 
+    # Draw the travel-time reference lines and live traffic statistics.
     cv2.line(
         annotated_frame,
         (0, line_1_y),
@@ -319,6 +333,7 @@ cv2.destroyAllWindows()
 
 print("\nVehicle Summary")
     
+# Print a summary of every tracked vehicle after video processing finishes.
 for track_id, data in vehicles.items():
     duration = data["last_seen"] - data['first_seen']
 

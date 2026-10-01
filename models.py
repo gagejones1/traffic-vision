@@ -4,6 +4,7 @@ from sqlalchemy.orm import declarative_base
 Base = declarative_base()
 
 
+# Stores detected vehicle information and trip measurements in the vehicles table.
 class Vehicle(Base):
     __tablename__ = "vehicles"
 

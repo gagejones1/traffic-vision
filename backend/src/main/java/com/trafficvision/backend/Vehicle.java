@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+// Maps vehicle detection and trip data to records stored in the vehicles table.
 @Entity 
 @Table(name = "vehicles")
 public class Vehicle {
